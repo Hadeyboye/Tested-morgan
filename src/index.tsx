@@ -438,7 +438,7 @@ app.get('*', (c) => {
 // ─── EmailJS Initialization ──────────────────────────────────────────────────
 // NOTE: Replace YOUR_PUBLIC_KEY with your EmailJS public key
 // Set up at https://emailjs.com (free — 200 emails/month)
-emailjs.init("YOUR_PUBLIC_KEY");
+emailjs.init("A68jtEQKexC9QkTl1");
 
 // ─── Testimonies Data ────────────────────────────────────────────────────────
 const allTestimonies = [
@@ -637,7 +637,7 @@ document.getElementById('wishForm').addEventListener('submit', async (e) => {
 
     // Send the email via EmailJS
     // IMPORTANT: Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with values from your EmailJS account
-    await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams);
+    await emailjs.send('service_qk0u03c', 'template_kvqdprv', templateParams);
 
     // Success!
     document.getElementById('wishForm').classList.add('hidden');

